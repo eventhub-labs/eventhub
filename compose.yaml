@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:17
+
+    environment:
+      POSTGRES_DB: eventhub
+      POSTGRES_USER: eventhub
+      POSTGRES_PASSWORD: eventhub
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - eventhub_postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eventhub -d eventhub"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+  adminer:
+    image: adminer:latest
+
+    ports:
+      - "8081:8080"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eventhub
+      SPRING_DATASOURCE_USERNAME: eventhub
+      SPRING_DATASOURCE_PASSWORD: eventhub
+
+      # В контейнере Spring не должен пытаться сам запускать ещё один Compose
+      SPRING_DOCKER_COMPOSE_ENABLED: "false"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+
+volumes:
+  eventhub_postgres_data:
