@@ -2,7 +2,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import Welcome from "./_components/welcome";
 import LoginForm from "./_components/login-form";
 
-export default function LoginPage() {
+export default async function LoginPage() {
   return (
     <div className="relative flex h-screen max-h-screen w-screen items-center justify-center">
       <div className="flex gap-x-12">
