@@ -2,6 +2,7 @@ package com.eventhub.eventapp.user.domain;
 
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -30,10 +31,24 @@ public class User {
 
     private String phone;
 
+    @Setter
     @Column(nullable = false)
     private String password;
 
+    @Setter
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User(){
+    }
+
+    public User(String email, String username, String name, String surname, String userImg, String phone){
+        this.email = email;
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.userImg = userImg;
+        this.phone = phone;
+    }
 }
