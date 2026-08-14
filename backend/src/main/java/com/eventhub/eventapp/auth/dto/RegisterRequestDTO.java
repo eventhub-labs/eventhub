@@ -1,6 +1,6 @@
 package com.eventhub.eventapp.auth.dto;
 
-public record RegisterRequest(
+public record RegisterRequestDTO(
         String email,
         String username,
         String name,
