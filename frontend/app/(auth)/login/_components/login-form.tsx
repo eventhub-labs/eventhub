@@ -1,79 +1,124 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import login from "@/features/auth/login";
+import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
+import z from "zod";
 
-type LoginFormProps = {
-  className?: string;
-};
+const loginFormSchema = z.object({
+  email: z.email(),
+  password: z.string().nonempty("Password field cannot be empty"),
+});
 
-export default function LoginForm({ className }: LoginFormProps) {
+export default function LoginForm() {
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    validators: {
+      onSubmit: loginFormSchema,
+    },
+    onSubmit: async ({ value }) => {
+      const formData = new FormData();
+      formData.set("email", value.email);
+      formData.set("password", value.password);
+      await login(formData);
+    },
+  });
+
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle className="text-center text-xl font-bold">
-          Welcome back!
-        </CardTitle>
-        <CardDescription className="text-center">
-          Login into your EventHub account
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent>
-        <form>
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-1">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-1">
-              <div className="flex items-center">
-                <Label htmlFor="password" className="mt-2">
-                  Password
-                </Label>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="●●●●●●●●●●"
-                required
-              />
-              <Link
-                href="#"
-                className="mt-2 ml-auto inline-block text-xs underline-offset-4 hover:underline"
-              >
-                Forgot your password?
-              </Link>
-            </div>
-            <Button type="submit">
-              <span className="text-sm font-bold">Log In</span>
-            </Button>
-          </div>
-        </form>
-        <div className="mt-1 text-center">
-          <span className="text-muted-foreground mr-2 text-xs">
-            Don&apos;t have an account?
-          </span>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit();
+      }}
+      id="login-form"
+    >
+      <div className="flex flex-col gap-6">
+        <FieldGroup>
+          <form.Field
+            name="email"
+            // eslint-disable-next-line react/no-children-prop
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid} className="gap-0.5">
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    placeholder="example@mail.com"
+                    autoComplete="off"
+                  />
+                  {isInvalid && (
+                    <FieldError
+                      errors={field.state.meta.errors}
+                      className="text-xs"
+                    />
+                  )}
+                </Field>
+              );
+            }}
+          />
+        </FieldGroup>
+        <div className="grid gap-1">
+          <FieldGroup>
+            <form.Field
+              name="password"
+              // eslint-disable-next-line react/no-children-prop
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid} className="gap-0.5">
+                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="*********"
+                      autoComplete="off"
+                      type="password"
+                    />
+                    {isInvalid && (
+                      <FieldError
+                        errors={field.state.meta.errors}
+                        className="text-xs"
+                      />
+                    )}
+                  </Field>
+                );
+              }}
+            />
+          </FieldGroup>
           <Link
             href="#"
             className="mt-2 ml-auto inline-block text-xs underline-offset-4 hover:underline"
           >
-            Create account
+            Forgot your password?
           </Link>
         </div>
-      </CardContent>
-    </Card>
+        <Button type="submit">
+          <span className="text-sm font-bold">Log In</span>
+        </Button>
+      </div>
+    </form>
   );
 }
