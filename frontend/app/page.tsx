@@ -1,11 +1,9 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
 export default async function Page() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("access_token")?.value;
-
-  if (!token) {
-    redirect("/login");
-  }
+  return (
+    <div className="flex h-screen min-h-screen w-screen items-center justify-center">
+      <h1 className="animate-pulse text-xl uppercase">
+        We are choosing path for you...
+      </h1>
+    </div>
+  );
 }
