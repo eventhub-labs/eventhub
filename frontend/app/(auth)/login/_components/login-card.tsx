@@ -32,7 +32,7 @@ export default function LoginCard({ className }: LoginFormProps) {
             Don&apos;t have an account?
           </span>
           <Link
-            href="#"
+            href="/register"
             className="mt-2 ml-auto inline-block text-xs underline-offset-4 hover:underline"
           >
             Create account
