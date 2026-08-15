@@ -27,7 +27,7 @@ const registerFormSchema = z.object({
     .string()
     .nonempty("Field name cannot be empty")
     .max(50, "Max name length is 50 symbols"),
-  phone: z.string().max(30, "Max phone length is 30 numbers"),
+  phone: z.string().regex(/^\+[1-9]\d{7,14}$/, "Incorrect phone number"),
   password: z
     .string()
     .min(8, "Min password length is 8 symbols")
