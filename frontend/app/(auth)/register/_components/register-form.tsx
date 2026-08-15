@@ -143,7 +143,7 @@ export default function RegisterForm() {
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
-                    placeholder="USER123"
+                    placeholder="user"
                     autoComplete="off"
                   />
                   {isInvalid && (
