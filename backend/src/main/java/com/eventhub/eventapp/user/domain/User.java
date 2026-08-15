@@ -2,6 +2,7 @@ package com.eventhub.eventapp.user.domain;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
@@ -11,22 +12,26 @@ import java.util.UUID;
 public class User {
 
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Getter
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Getter
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column()
+    @Getter
     private String name;
 
-    @Column()
+    @Getter
     private String surname;
 
-    @Column()
+    @Getter
+    @Column(name = "user_img")
     private String userImg;
 
     private String phone;
@@ -40,15 +45,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(){
+    protected User(){
     }
 
-    public User(String email, String username, String name, String surname, String userImg, String phone){
+    public User(String email, String username, String name, String surname, String phone){
         this.email = email;
         this.username = username;
         this.name = name;
         this.surname = surname;
-        this.userImg = userImg;
         this.phone = phone;
     }
 }
