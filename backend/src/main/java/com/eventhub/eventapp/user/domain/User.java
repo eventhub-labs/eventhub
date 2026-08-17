@@ -36,10 +36,12 @@ public class User {
 
     private String phone;
 
+    @Getter
     @Setter
     @Column(nullable = false)
     private String password;
 
+    @Getter
     @Setter
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
