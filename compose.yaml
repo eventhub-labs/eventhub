@@ -39,6 +39,9 @@ services:
     ports:
       - "8080:8080"
 
+    env_file:
+      - ./backend/.env
+
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eventhub
       SPRING_DATASOURCE_USERNAME: eventhub
