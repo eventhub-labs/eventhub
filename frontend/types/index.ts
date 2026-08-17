@@ -5,4 +5,5 @@ export interface IResponseUser {
   username: string;
   name: string;
   surname: string;
+  imgUrl: string;
 }
