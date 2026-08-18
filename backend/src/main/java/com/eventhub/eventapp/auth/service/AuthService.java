@@ -71,7 +71,7 @@ public class AuthService {
 
         String accessToken = jwtService.generateAccessToken(u);
 
-        return new RefreshResponseDTO(accessToken);
+        return new RefreshResponseDTO(u.getEmail(), u.getUsername(), u.getName(), u.getSurname(), u.getUserImg(), accessToken);
     }
 
 
