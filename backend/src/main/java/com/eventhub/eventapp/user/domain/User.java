@@ -34,6 +34,7 @@ public class User {
     @Column(name = "user_img")
     private String userImg;
 
+    @Getter
     private String phone;
 
     @Getter
