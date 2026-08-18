@@ -7,3 +7,8 @@ export interface IResponseUser {
   surname: string;
   imgUrl: string;
 }
+
+export interface IRequestLogin {
+  email: string;
+  password: string;
+}

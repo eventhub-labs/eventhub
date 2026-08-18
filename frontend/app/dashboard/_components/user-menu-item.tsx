@@ -41,6 +41,7 @@ export default function UserMenuItem() {
             src="/img/no-user.png"
             alt="user image"
             fill
+            sizes="48"
           />
         </div>
         <div className="flex flex-col">
