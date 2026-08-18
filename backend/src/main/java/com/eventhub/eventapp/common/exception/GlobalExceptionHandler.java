@@ -5,6 +5,7 @@ import com.eventhub.eventapp.auth.exception.UserAlreadyExistsException;
 import com.eventhub.eventapp.auth.exception.InvalidCredentialsException;
 import com.eventhub.eventapp.common.exception.dto.ErrorResponseDTO;
 import com.eventhub.eventapp.common.exception.dto.ValidationErrorResponseDTO;
+import com.eventhub.eventapp.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -41,6 +42,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidRefreshTokenException.class)
     public ResponseEntity<ErrorResponseDTO> handleInvalidRefreshToken(InvalidRefreshTokenException ex){
         return new ResponseEntity<>(new ErrorResponseDTO(ex.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidRefreshToken(UserNotFoundException ex){
+        return new ResponseEntity<>(new ErrorResponseDTO(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
 }
