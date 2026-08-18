@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<FullProfileInfoResponseDTO> getUserProfileById(@AuthenticationPrincipal Jwt jwt){
+    public ResponseEntity<FullProfileInfoResponseDTO> getCurrentUserProfile(@AuthenticationPrincipal Jwt jwt){
         UUID userId = UUID.fromString(jwt.getSubject());
         return ResponseEntity.ok().body(this.userService.getFullProfileInfo(userId));
     }
