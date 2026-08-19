@@ -14,7 +14,8 @@ export default function RestoreUserHydrator() {
         setUser(user as IResponseUser);
       });
     }
-  }, [setUser, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return null;
 }
