@@ -1,21 +1,20 @@
 "use client";
 
 import { useUser } from "@/store/user";
-import { IResponseUser } from "@/types";
 import { useEffect } from "react";
+import restoreSession from "./restore-session";
+import { IResponseUser } from "@/types";
 
-type RestoreUserHydratorProps = {
-  user: IResponseUser;
-};
-
-export default function RestoreUserHydrator({
-  user,
-}: RestoreUserHydratorProps) {
-  const { setUser } = useUser();
+export default function RestoreUserHydrator() {
+  const { user, setUser } = useUser();
 
   useEffect(() => {
-    setUser(user);
-  }, [user, setUser]);
+    if (!user) {
+      restoreSession().then((user) => {
+        setUser(user as IResponseUser);
+      });
+    }
+  }, [setUser, user]);
 
   return null;
 }

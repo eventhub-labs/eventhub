@@ -18,7 +18,7 @@ export default async function login(formData: FormData) {
     },
     body: JSON.stringify(body),
   });
-
+  console.log(res);
   if (res.status === 200) {
     const setCookie = res.headers.get("set-cookie");
     const token = parseCookie(setCookie || "", "refreshToken");
