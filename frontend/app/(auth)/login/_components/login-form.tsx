@@ -14,6 +14,7 @@ import { IResponseUser } from "@/types";
 import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 import z from "zod";
 
 const loginFormSchema = z.object({
@@ -36,16 +37,17 @@ export default function LoginForm() {
       const formData = new FormData();
       formData.set("email", value.email);
       formData.set("password", value.password);
-      const user = (await login(formData)) as IResponseUser | null;
 
-      console.log(user);
+      const res = await login(formData);
+      const user = res?.data as IResponseUser | null;
 
-      if (!user) {
-        return;
+      if (res?.status === 200 && user) {
+        setUser(user);
+        toast.success("Successfuly logged in", {});
+        redirect("/dashboard");
       }
 
-      setUser(user);
-      redirect("/dashboard");
+      toast.warning("Wrong email or password");
     },
   });
 

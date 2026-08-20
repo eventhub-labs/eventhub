@@ -29,6 +29,9 @@ export default async function login(formData: FormData) {
       sameSite: "lax",
       path: "/",
     });
-    return await res.json();
+    return {
+      data: await res.json(),
+      status: 200,
+    };
   }
 }
