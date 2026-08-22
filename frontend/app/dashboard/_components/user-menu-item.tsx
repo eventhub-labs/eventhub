@@ -6,12 +6,22 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import logout from "@/features/auth/logout";
 import { useUser } from "@/store/user";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 export default function UserMenuItem() {
-  const { user } = useUser();
+  const { user, clearUser } = useUser();
+
+  const handleLogout = async () => {
+    await logout();
+    clearUser();
+    toast.success("Loged out!");
+    redirect("/login");
+  };
 
   if (!user) {
     return (
@@ -41,6 +51,7 @@ export default function UserMenuItem() {
             src="/img/no-user.png"
             alt="user image"
             fill
+            sizes="48"
           />
         </div>
         <div className="flex flex-col">
@@ -50,7 +61,7 @@ export default function UserMenuItem() {
           <span>{user?.email}</span>
         </div>
       </SidebarMenuButton>
-      <SidebarMenuAction>
+      <SidebarMenuAction onClick={handleLogout}>
         <LogOut /> <span className="sr-only">Log out</span>
       </SidebarMenuAction>
     </SidebarMenuItem>

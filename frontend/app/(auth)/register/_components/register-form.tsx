@@ -9,8 +9,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import register from "@/features/auth/register";
+import { useUser } from "@/store/user";
+import { IResponseUser } from "@/types";
 import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 import z from "zod";
 
 const registerFormSchema = z.object({
@@ -39,6 +44,8 @@ const registerFormSchema = z.object({
 });
 
 export default function RegisterForm() {
+  const { setUser } = useUser();
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -52,7 +59,26 @@ export default function RegisterForm() {
     validators: {
       onSubmit: registerFormSchema,
     },
-    onSubmit: async ({ value }) => {},
+    onSubmit: async ({ value }) => {
+      const formData = new FormData();
+      formData.set("email", value.email);
+      formData.set("password", value.password);
+      formData.set("username", value.userName);
+      formData.set("name", value.name);
+      formData.set("surname", value.surname);
+      formData.set("phone", value.phone);
+
+      const res = await register(formData);
+      const user = res?.data as IResponseUser | null;
+
+      if (res?.status === 201 && user) {
+        setUser(user);
+        toast.success("Successfuly registered", {});
+        redirect("/dashboard");
+      }
+
+      toast.warning("Something went wrong");
+    },
   });
 
   return (
@@ -309,7 +335,11 @@ export default function RegisterForm() {
           />
         </FieldGroup>
       </div>
-      <Button type="submit" className="mt-5 w-full">
+      <Button
+        type="submit"
+        className="mt-5 w-full"
+        disabled={form.state.isSubmitting}
+      >
         <span className="text-sm font-bold">Register</span>
       </Button>
       <div className="mt-3 text-center">

@@ -9,8 +9,12 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import login from "@/features/auth/login";
+import { useUser } from "@/store/user";
+import { IResponseUser } from "@/types";
 import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 import z from "zod";
 
 const loginFormSchema = z.object({
@@ -19,6 +23,8 @@ const loginFormSchema = z.object({
 });
 
 export default function LoginForm() {
+  const { setUser } = useUser();
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -31,7 +37,17 @@ export default function LoginForm() {
       const formData = new FormData();
       formData.set("email", value.email);
       formData.set("password", value.password);
-      await login(formData);
+
+      const res = await login(formData);
+      const user = res?.data as IResponseUser | null;
+
+      if (res?.status === 200 && user) {
+        setUser(user);
+        toast.success("Successfuly logged in", {});
+        redirect("/dashboard");
+      }
+
+      toast.warning("Wrong email or password");
     },
   });
 
@@ -115,7 +131,7 @@ export default function LoginForm() {
             Forgot your password?
           </Link>
         </div>
-        <Button type="submit">
+        <Button type="submit" disabled={form.state.isSubmitting}>
           <span className="text-sm font-bold">Log In</span>
         </Button>
       </div>

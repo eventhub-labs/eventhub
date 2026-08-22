@@ -4,6 +4,7 @@ import { create } from "zustand";
 interface UserState {
   user: Omit<IResponseUser, "refreshToken"> | null;
   setUser: (user: IResponseUser) => void;
+  clearUser: () => void;
 }
 
 export const useUser = create<UserState>((set) => ({
@@ -14,4 +15,9 @@ export const useUser = create<UserState>((set) => ({
       const { refreshToken, ...userWithoutRefreshToken } = user;
       return { user: userWithoutRefreshToken };
     }),
+  clearUser: () => {
+    set(() => {
+      return { user: null };
+    });
+  },
 }));
