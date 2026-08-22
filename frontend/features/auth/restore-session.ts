@@ -14,5 +14,12 @@ export default async function restoreSession() {
     },
   });
 
-  return await res.json();
+  if (res.status === 200) {
+    return {
+      data: await res.json(),
+      status: 200,
+    };
+  }
+
+  return;
 }

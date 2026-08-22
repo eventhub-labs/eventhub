@@ -11,6 +11,7 @@ import { useUser } from "@/store/user";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 export default function UserMenuItem() {
   const { user, clearUser } = useUser();
@@ -18,6 +19,7 @@ export default function UserMenuItem() {
   const handleLogout = async () => {
     await logout();
     clearUser();
+    toast.success("Loged out!");
     redirect("/login");
   };
 

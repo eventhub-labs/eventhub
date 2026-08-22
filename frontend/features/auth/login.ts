@@ -34,4 +34,9 @@ export default async function login(formData: FormData) {
       status: 200,
     };
   }
+
+  return {
+    data: null,
+    status: res.status,
+  };
 }
