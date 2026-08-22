@@ -10,6 +10,7 @@ import logout from "@/features/auth/logout";
 import { useUser } from "@/store/user";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 
@@ -44,7 +45,10 @@ export default function UserMenuItem() {
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton render={<a href="/dashboard/user" />} className="p-1">
+      <SidebarMenuButton
+        render={<Link href="/dashboard/user" />}
+        className="p-1"
+      >
         <div className="relative aspect-square h-full">
           <Image
             className="w-12"

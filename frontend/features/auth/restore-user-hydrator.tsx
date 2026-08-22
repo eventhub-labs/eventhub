@@ -23,6 +23,7 @@ export default function RestoreUserHydrator() {
           toast.warning(err);
         });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
