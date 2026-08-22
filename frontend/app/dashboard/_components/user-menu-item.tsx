@@ -48,7 +48,7 @@ export default function UserMenuItem() {
         <div className="relative aspect-square h-full">
           <Image
             className="w-12"
-            src="/img/no-user.png"
+            src={user.imgUrl || "/img/no-user.png"}
             alt="user image"
             fill
             sizes="48"
@@ -58,7 +58,7 @@ export default function UserMenuItem() {
           <span>
             {user?.name} {user?.surname}
           </span>
-          <span>{user?.email}</span>
+          <span className="text-muted-foreground text-xs">{user?.email}</span>
         </div>
       </SidebarMenuButton>
       <SidebarMenuAction onClick={handleLogout}>
