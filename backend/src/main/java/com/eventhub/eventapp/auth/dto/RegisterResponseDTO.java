@@ -7,5 +7,6 @@ public record RegisterResponseDTO (
     String username,
     String name,
     String surname,
+    String phone,
     String accessToken
 ){}
