@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { KeySquare, Pen } from "lucide-react";
 
-export default async function UserProfileActions() {
+export default function UserProfileActions() {
   return (
     <Accordion className="border-muted h-min w-75 shrink-0 border-2 bg-transparent">
       <AccordionItem>

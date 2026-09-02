@@ -50,16 +50,16 @@ type UserProfileCardProps = {
   imgSrc: string | null;
   name: string;
   surname: string;
-  userName: string;
+  username: string;
   email: string;
   phone?: string;
 };
 
-export default async function UserProfileCard({
+export default function UserProfileCard({
   email,
   name,
   surname,
-  userName,
+  username,
   phone,
   imgSrc,
 }: UserProfileCardProps) {
@@ -85,7 +85,7 @@ export default async function UserProfileCard({
         <h2 className="mt-3 text-2xl font-bold">
           {name} {surname}
         </h2>
-        <h5 className="text-muted-foreground">@{userName}</h5>
+        <h5 className="text-muted-foreground">@{username}</h5>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-y-4 pb-8">
