@@ -83,7 +83,7 @@ export default function UserProfileEditForm({
         form.handleSubmit();
       }}
     >
-      <div className="flex flex-col gap-y-3 px-4">
+      <div className="flex flex-col gap-y-3 px-4 pt-4">
         <FieldGroup>
           <form.Field
             name="name"
