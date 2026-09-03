@@ -11,6 +11,7 @@ import { IResponseUser } from "@/types";
 
 export default function UserProfile() {
   const accessToken = useUser((state) => state.user?.accessToken);
+  const { user: updatedUser } = useUser((state) => state);
   const [user, setUser] = useState<IResponseUser | null>(null);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function UserProfile() {
     return () => {
       ignore = true;
     };
-  }, [accessToken]);
+  }, [accessToken, updatedUser]);
 
   return (
     <div className="flex gap-x-8 px-12 pt-1">

@@ -193,7 +193,6 @@ export default function UserProfileEditForm({
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => {
-                      console.log(e);
                       field.handleChange(e);
                     }}
                     aria-invalid={isInvalid}
