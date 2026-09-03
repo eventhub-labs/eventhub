@@ -9,7 +9,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import updateProfile from "@/features/user/update-profile";
+import { useUser } from "@/store/user";
 import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
 import z from "zod";
 
 type UserProfileEditFormProps = {
@@ -41,6 +44,9 @@ export default function UserProfileEditForm({
   username,
   phone,
 }: UserProfileEditFormProps) {
+  const accessToken = useUser((state) => state.user?.accessToken);
+  const setUser = useUser((state) => state.setUser);
+
   const form = useForm({
     defaultValues: {
       name: name,
@@ -51,14 +57,30 @@ export default function UserProfileEditForm({
     validators: {
       onSubmit: editFormSchema,
     },
-    onSubmit: async ({ value }) => {},
+    onSubmit: async ({ value }) => {
+      if (!accessToken) {
+        return;
+      }
+      const formData = new FormData();
+      formData.set("name", value.name);
+      formData.set("surname", value.surname);
+      formData.set("username", value.userName);
+      formData.set("phone", value.phone || "");
+
+      const res = await updateProfile(formData, accessToken);
+
+      if (res?.status === 200) {
+        setUser({ accessToken, ...res.data });
+        toast.success("Profile data has been updated");
+      }
+    },
   });
 
   return (
     <form
-      onSubmit={async (e) => {
+      onSubmit={(e) => {
         e.preventDefault();
-        await form.handleSubmit();
+        form.handleSubmit();
       }}
     >
       <div className="flex flex-col gap-y-3 px-4">

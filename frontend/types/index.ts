@@ -21,3 +21,10 @@ export interface IRequestRegister {
   surname: string;
   phone?: string;
 }
+
+export interface IRequestUpdateUser {
+  username: string;
+  name: string;
+  surname: string;
+  phone?: string;
+}

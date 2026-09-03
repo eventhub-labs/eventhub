@@ -22,7 +22,6 @@ export default async function register(formData: FormData) {
     },
     body: JSON.stringify(body),
   });
-  console.log(res);
 
   if (res.status === 201) {
     const setCookie = res.headers.get("set-cookie");
