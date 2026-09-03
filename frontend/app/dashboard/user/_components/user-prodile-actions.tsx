@@ -4,7 +4,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Skeleton } from "@/components/ui/skeleton";
 import { KeySquare, Pen } from "lucide-react";
+
+export function UserProfileActionsSkeleton() {
+  return (
+    <div className="flex w-75 flex-col">
+      <Skeleton className="h-15" />
+      <Skeleton className="h-15" />
+    </div>
+  );
+}
 
 export default function UserProfileActions() {
   return (

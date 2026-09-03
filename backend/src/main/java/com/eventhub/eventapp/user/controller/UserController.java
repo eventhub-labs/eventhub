@@ -1,5 +1,7 @@
 package com.eventhub.eventapp.user.controller;
 
+import com.eventhub.eventapp.user.dto.DeleteAccountRequestDTO;
+import com.eventhub.eventapp.user.dto.ModifyPasswordRequestDTO;
 import com.eventhub.eventapp.user.dto.FullProfileInfoResponseDTO;
 import com.eventhub.eventapp.user.dto.ModifyProfileRequestDTO;
 import com.eventhub.eventapp.user.dto.PublicUserProfileResponseDTO;
@@ -38,4 +40,22 @@ public class UserController {
         UUID userId = UUID.fromString(jwt.getSubject());
         return ResponseEntity.ok().body(this.userService.modifyProfileInfo(userId, modifyProfileRequestDTO));
     }
+
+    @PatchMapping("/me/password")
+    public ResponseEntity<Void> modifyCurrentUserPassword(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ModifyPasswordRequestDTO requestDTO){
+        UUID userId = UUID.fromString(jwt.getSubject());
+
+        this.userService.modifyPassword(userId, requestDTO);
+
+        return ResponseEntity.noContent().build();
+    }
+
+//    @DeleteMapping("/me")
+//    public ResponseEntity<Void> deleteProfile(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody DeleteAccountRequestDTO requestDTO){
+//        UUID userId = UUID.fromString(jwt.getSubject());
+//
+//        this.userService.deleteProfile(userId, requestDTO);
+//
+//        return ResponseEntity.noContent().build();
+//    }
 }

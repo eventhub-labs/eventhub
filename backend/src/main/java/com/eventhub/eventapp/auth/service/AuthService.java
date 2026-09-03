@@ -36,7 +36,7 @@ public class AuthService {
 
         User createdUser = this.createUser(registerRequest);
 
-        return new RegisterResult(new RegisterResponseDTO(createdUser.getEmail(), createdUser.getUsername(), createdUser.getName(), createdUser.getSurname(), this.jwtService.generateAccessToken(createdUser)),  this.jwtService.generateRefreshToken(createdUser));
+        return new RegisterResult(new RegisterResponseDTO(createdUser.getEmail(), createdUser.getUsername(), createdUser.getName(), createdUser.getSurname(), createdUser.getPhone(), this.jwtService.generateAccessToken(createdUser)),  this.jwtService.generateRefreshToken(createdUser));
     }
 
     public LoginResult login(LoginRequestDTO loginRequestDTO){

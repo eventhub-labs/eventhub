@@ -1,7 +1,9 @@
 "use client";
 
 import getMyProfile from "@/features/user/get-my-profile";
-import UserProfileActions from "./user-prodile-actions";
+import UserProfileActions, {
+  UserProfileActionsSkeleton,
+} from "./user-prodile-actions";
 import UserProfileCard, { UserProfileCardSkeleton } from "./user-profile-card";
 import { useEffect, useState } from "react";
 import { useUser } from "@/store/user";
@@ -35,9 +37,9 @@ export default function UserProfile() {
 
   return (
     <div className="flex gap-x-8 px-12 pt-1">
-      {user ? <UserProfileCard {...user} /> : "Loading"}
+      {user ? <UserProfileCard {...user} /> : <UserProfileCardSkeleton />}
 
-      <UserProfileActions />
+      {user ? <UserProfileActions /> : <UserProfileActionsSkeleton />}
     </div>
   );
 }
