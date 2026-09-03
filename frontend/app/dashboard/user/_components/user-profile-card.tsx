@@ -64,7 +64,7 @@ export default function UserProfileCard({
   imgSrc,
 }: UserProfileCardProps) {
   return (
-    <Card className="border-muted w-100 shrink-0 border-2 bg-transparent p-0">
+    <Card className="border-muted h-min w-100 shrink-0 border-2 bg-transparent p-0">
       <CardHeader className="bg-accent flex flex-col items-center gap-y-1 border-b p-8">
         <div className="relative">
           <Image

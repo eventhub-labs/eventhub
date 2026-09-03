@@ -3,21 +3,11 @@
 import getMyProfile from "@/features/user/get-my-profile";
 import UserProfileActions, {
   UserProfileActionsSkeleton,
-} from "./user-prodile-actions";
+} from "./user-profile-actions";
 import UserProfileCard, { UserProfileCardSkeleton } from "./user-profile-card";
 import { useEffect, useState } from "react";
 import { useUser } from "@/store/user";
 import { IResponseUser } from "@/types";
-
-export function UserProfileSkeleton() {
-  return (
-    <div className="flex gap-x-8 px-12 pt-1">
-      <UserProfileCardSkeleton />
-
-      <UserProfileActions />
-    </div>
-  );
-}
 
 export default function UserProfile() {
   const accessToken = useUser((state) => state.user?.accessToken);
@@ -39,7 +29,7 @@ export default function UserProfile() {
     <div className="flex gap-x-8 px-12 pt-1">
       {user ? <UserProfileCard {...user} /> : <UserProfileCardSkeleton />}
 
-      {user ? <UserProfileActions /> : <UserProfileActionsSkeleton />}
+      {user ? <UserProfileActions {...user} /> : <UserProfileActionsSkeleton />}
     </div>
   );
 }
