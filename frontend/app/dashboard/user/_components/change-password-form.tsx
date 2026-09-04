@@ -8,7 +8,12 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import logout from "@/features/auth/logout";
+import changePassword from "@/features/user/change-password";
+import { useUser } from "@/store/user";
 import { useForm } from "@tanstack/react-form";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 import z from "zod";
 
 const changePasswordSchema = z.object({
@@ -27,6 +32,9 @@ const changePasswordSchema = z.object({
 });
 
 export default function ChangePasswordForm() {
+  const accessToken = useUser((state) => state.user?.accessToken);
+  const cleatUser = useUser((state) => state.clearUser);
+
   const form = useForm({
     defaultValues: {
       currentPassword: "",
@@ -36,7 +44,24 @@ export default function ChangePasswordForm() {
     validators: {
       onSubmit: changePasswordSchema,
     },
-    onSubmit: async ({ value }) => {},
+    onSubmit: async ({ value }) => {
+      if (!accessToken) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.set("currentPassword", value.currentPassword);
+      formData.set("newPassword", value.newPassword);
+
+      const res = await changePassword(formData, accessToken);
+
+      if (res?.status === 204) {
+        toast.success("Password Changed");
+        logout();
+        cleatUser();
+        redirect("/login");
+      }
+    },
   });
 
   return (

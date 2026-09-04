@@ -28,3 +28,8 @@ export interface IRequestUpdateUser {
   surname: string;
   phone?: string;
 }
+
+export interface IRequestChangePassword {
+  currentPassword: string;
+  newPassword: string;
+}
