@@ -26,6 +26,7 @@ export interface IRequestUpdateUser {
   username: string;
   name: string;
   surname: string;
+  email: string;
   phone?: string;
 }
 

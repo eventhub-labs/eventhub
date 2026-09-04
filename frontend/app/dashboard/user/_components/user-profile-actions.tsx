@@ -44,6 +44,7 @@ export default function UserProfileActions({
           <UserProfileEditForm
             name={name}
             surname={surname}
+            email={email}
             phone={phone}
             username={username}
           />

@@ -10,6 +10,7 @@ export default async function updateProfile(
     name: formData.get("name") as string,
     surname: formData.get("surname") as string,
     username: formData.get("username") as string,
+    email: formData.get("email") as string,
     phone: formData.get("phone") as string,
   };
 

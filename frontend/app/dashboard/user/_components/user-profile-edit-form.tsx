@@ -19,10 +19,12 @@ type UserProfileEditFormProps = {
   name: string;
   surname: string;
   username: string;
+  email: string;
   phone?: string;
 };
 
 const editFormSchema = z.object({
+  email: z.email().max(255, "Max name length is 255 symbols"),
   userName: z
     .string()
     .min(3, "Min username length is 3 symbols")
@@ -42,6 +44,7 @@ export default function UserProfileEditForm({
   name,
   surname,
   username,
+  email,
   phone,
 }: UserProfileEditFormProps) {
   const accessToken = useUser((state) => state.user?.accessToken);
@@ -52,6 +55,7 @@ export default function UserProfileEditForm({
       name: name,
       surname: surname,
       userName: username,
+      email: email,
       phone: phone,
     },
     validators: {
@@ -65,6 +69,7 @@ export default function UserProfileEditForm({
       formData.set("name", value.name);
       formData.set("surname", value.surname);
       formData.set("username", value.userName);
+      formData.set("email", value.email);
       formData.set("phone", value.phone || "");
 
       const res = await updateProfile(formData, accessToken);
@@ -165,6 +170,37 @@ export default function UserProfileEditForm({
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
                     placeholder="Your name"
+                    autoComplete="off"
+                  />
+                  {isInvalid && (
+                    <FieldError
+                      errors={field.state.meta.errors}
+                      className="text-xs"
+                    />
+                  )}
+                </Field>
+              );
+            }}
+          />
+        </FieldGroup>
+        <FieldGroup className="col-span-2">
+          <form.Field
+            name="email"
+            // eslint-disable-next-line react/no-children-prop
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid} className="gap-0.5">
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    placeholder="example@gmail.com"
                     autoComplete="off"
                   />
                   {isInvalid && (
