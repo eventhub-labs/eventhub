@@ -7,6 +7,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { KeySquare, Pen } from "lucide-react";
 import UserProfileEditForm from "./user-profile-edit-form";
+import ChangePasswordForm from "./change-password-form";
 
 export function UserProfileActionsSkeleton() {
   return (
@@ -54,7 +55,9 @@ export default function UserProfileActions({
           <KeySquare height={20} />
           <span>Change Password</span>
         </AccordionTrigger>
-        <AccordionContent></AccordionContent>
+        <AccordionContent>
+          <ChangePasswordForm />
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   );
