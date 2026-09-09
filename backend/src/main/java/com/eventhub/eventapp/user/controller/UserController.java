@@ -1,16 +1,15 @@
 package com.eventhub.eventapp.user.controller;
 
-import com.eventhub.eventapp.user.dto.DeleteAccountRequestDTO;
-import com.eventhub.eventapp.user.dto.ModifyPasswordRequestDTO;
-import com.eventhub.eventapp.user.dto.FullProfileInfoResponseDTO;
-import com.eventhub.eventapp.user.dto.ModifyProfileRequestDTO;
-import com.eventhub.eventapp.user.dto.PublicUserProfileResponseDTO;
+import com.eventhub.eventapp.user.dto.*;
 import com.eventhub.eventapp.user.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -48,6 +47,29 @@ public class UserController {
         this.userService.modifyPassword(userId, requestDTO);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(
+            value = "/me/img",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<Void> modifyUserImg(@AuthenticationPrincipal Jwt jwt, @RequestParam("file") MultipartFile file){
+        UUID userId = UUID.fromString(jwt.getSubject());
+
+        this.userService.modifyUserImg(userId, file);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me/img")
+    public ResponseEntity<Resource> getUserImg(
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+
+        Resource resource = userService.getUserImg(userId);
+
+        return ResponseEntity.ok(resource);
     }
 
 //    @DeleteMapping("/me")
