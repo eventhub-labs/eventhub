@@ -18,6 +18,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import uploadPhoto from "@/features/user/upload-photo";
+import { useUser } from "@/store/user";
 import { FileUp, ImageUp, XIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -25,11 +27,14 @@ import Dropzone from "react-dropzone";
 import { toast } from "sonner";
 
 export default function UploadProfilePhotoDialog() {
+  const accessToken = useUser((state) => state.user?.accessToken);
+  const { setProfileImg } = useUser((state) => state);
   const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [attachmentState, setAttachmentState] = useState<
     "idle" | "done" | "uploading" | "processing" | "error"
   >("idle");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!uploadedPhoto) {
@@ -46,8 +51,29 @@ export default function UploadProfilePhotoDialog() {
     };
   }, [uploadedPhoto]);
 
+  const handleSubmitPhoto = async () => {
+    if (!uploadedPhoto) {
+      return;
+    }
+
+    setAttachmentState("uploading");
+
+    const formData = new FormData();
+    formData.set("file", uploadedPhoto);
+    const res = await uploadPhoto(formData, accessToken || "");
+    if (res?.status === 200 && res.photo) {
+      const photoUrl = URL.createObjectURL(res.photo);
+      setProfileImg(photoUrl);
+      toast.success("Profile image updated!");
+      setIsOpen(false);
+      setUploadedPhoto(null);
+    }
+
+    setAttachmentState("idle");
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className="bg-muted hover:bg-muted-foreground absolute right-0 bottom-0 rounded-full p-1 transition hover:scale-110">
         <div className="rounded-full">
           <ImageUp size={20} />
@@ -134,7 +160,8 @@ export default function UploadProfilePhotoDialog() {
 
         <Button
           variant="outline"
-          onClick={() => setAttachmentState("uploading")}
+          onClick={handleSubmitPhoto}
+          disabled={attachmentState === "uploading"}
         >
           Upload
         </Button>
