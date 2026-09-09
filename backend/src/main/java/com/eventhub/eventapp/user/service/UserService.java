@@ -1,18 +1,15 @@
 package com.eventhub.eventapp.user.service;
 
-import com.eventhub.eventapp.user.dto.DeleteAccountRequestDTO;
-import com.eventhub.eventapp.user.dto.ModifyPasswordRequestDTO;
+import com.eventhub.eventapp.user.dto.*;
 import com.eventhub.eventapp.auth.exception.InvalidCredentialsException;
 import com.eventhub.eventapp.auth.exception.UserAlreadyExistsException;
 import com.eventhub.eventapp.user.domain.User;
-import com.eventhub.eventapp.user.dto.FullProfileInfoResponseDTO;
-import com.eventhub.eventapp.user.dto.ModifyProfileRequestDTO;
-import com.eventhub.eventapp.user.dto.PublicUserProfileResponseDTO;
 import com.eventhub.eventapp.user.exception.UserNotFoundException;
 import com.eventhub.eventapp.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -21,10 +18,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserFileService fileService;
 
-    public UserService(UserRepository uRep, PasswordEncoder pEncoder){
+    public UserService(UserRepository uRep, PasswordEncoder pEncoder, UserFileService fService){
         this.userRepository = uRep;
         this.passwordEncoder = pEncoder;
+        this.fileService = fService;
     }
 
     public PublicUserProfileResponseDTO getPublicProfileInfo(UUID id){
@@ -98,5 +97,14 @@ public class UserService {
         }
 
         this.userRepository.delete(u);
+    }
+
+    @Transactional
+    public void modifyUserImg(UUID id, MultipartFile file){
+        User u = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User does not exist" ));
+
+        String path = this.fileService.saveFile(file);
+
+        u.setUserImg(path);
     }
 }
