@@ -3,6 +3,7 @@ package com.eventhub.eventapp.user.controller;
 import com.eventhub.eventapp.user.dto.*;
 import com.eventhub.eventapp.user.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -58,6 +59,17 @@ public class UserController {
         this.userService.modifyUserImg(userId, file);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me/img")
+    public ResponseEntity<Resource> getUserImg(
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+
+        Resource resource = userService.getUserImg(userId);
+
+        return ResponseEntity.ok(resource);
     }
 
 //    @DeleteMapping("/me")

@@ -6,6 +6,7 @@ import com.eventhub.eventapp.auth.exception.UserAlreadyExistsException;
 import com.eventhub.eventapp.user.domain.User;
 import com.eventhub.eventapp.user.exception.UserNotFoundException;
 import com.eventhub.eventapp.user.repository.UserRepository;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,5 +107,14 @@ public class UserService {
         String path = this.fileService.saveFile(file);
 
         u.setUserImg(path);
+    }
+
+    public Resource getUserImg(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User does not exist")
+                );
+
+        return this.fileService.getFile(user.getUserImg());
     }
 }
