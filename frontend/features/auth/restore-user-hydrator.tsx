@@ -7,16 +7,22 @@ import { IResponseUser } from "@/types";
 import { toast } from "sonner";
 
 export default function RestoreUserHydrator() {
-  const { user, setUser } = useUser();
+  const { user, setUser, setStatus } = useUser();
 
   useEffect(() => {
     if (!user) {
+      setStatus("fetching");
       restoreSession()
-        .then((user) => {
-          if (user?.status === 200 && user) {
-            setUser(user.data as IResponseUser);
+        .then((res) => {
+          if (res?.status === 200 && res) {
+            if (res.photo) {
+              res.data.imgUrl = URL.createObjectURL(res.photo);
+            }
+            setUser(res.data as IResponseUser);
+            setStatus("authorized");
           } else {
             toast.warning("Unauthorized");
+            setStatus("unauthorized");
           }
         })
         .catch((err) => {
