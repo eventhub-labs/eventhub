@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import login from "@/features/auth/login";
 import { useUser } from "@/store/user";
 import { IResponseUser } from "@/types";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useSelector } from "@tanstack/react-form";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
@@ -45,13 +45,15 @@ export default function LoginForm() {
       if (res?.status === 200 && user) {
         setUser(user);
         setStatus("authorized");
-        toast.success("Successfuly logged in", {});
+        toast.success("Successfuly logged in");
         redirect("/dashboard");
       }
 
       toast.warning("Wrong email or password");
     },
   });
+
+  const isSubmitting = useSelector(form.store, (state) => state.isSubmitting);
 
   return (
     <form
@@ -133,7 +135,7 @@ export default function LoginForm() {
             Forgot your password?
           </Link>
         </div>
-        <Button type="submit" disabled={form.state.isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           <span className="text-sm font-bold">Log In</span>
         </Button>
       </div>
