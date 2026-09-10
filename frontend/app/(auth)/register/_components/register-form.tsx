@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import register from "@/features/auth/register";
 import { useUser } from "@/store/user";
 import { IResponseUser } from "@/types";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useSelector } from "@tanstack/react-form";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
@@ -44,7 +44,7 @@ const registerFormSchema = z.object({
 });
 
 export default function RegisterForm() {
-  const { setUser } = useUser();
+  const { setUser, setStatus } = useUser();
 
   const form = useForm({
     defaultValues: {
@@ -68,18 +68,23 @@ export default function RegisterForm() {
       formData.set("surname", value.surname);
       formData.set("phone", value.phone);
 
+      setStatus("fetching");
       const res = await register(formData);
       const user = res?.data as IResponseUser | null;
 
       if (res?.status === 201 && user) {
         setUser(user);
+        setStatus("authorized");
         toast.success("Successfuly registered", {});
         redirect("/dashboard");
       }
 
+      setStatus("unauthorized");
       toast.warning("Something went wrong");
     },
   });
+
+  const isSubmitting = useSelector(form.store, (state) => state.isSubmitting);
 
   return (
     <form
@@ -335,11 +340,7 @@ export default function RegisterForm() {
           />
         </FieldGroup>
       </div>
-      <Button
-        type="submit"
-        className="mt-5 w-full"
-        disabled={form.state.isSubmitting}
-      >
+      <Button type="submit" className="mt-5 w-full" disabled={isSubmitting}>
         <span className="text-sm font-bold">Register</span>
       </Button>
       <div className="mt-3 text-center">
