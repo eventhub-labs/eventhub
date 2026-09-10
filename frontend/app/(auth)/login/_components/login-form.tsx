@@ -43,12 +43,17 @@ export default function LoginForm() {
       const user = res?.data as IResponseUser | null;
 
       if (res?.status === 200 && user) {
+        if (res.photo) {
+          user.imgUrl = URL.createObjectURL(res.photo);
+        }
+
         setUser(user);
         setStatus("authorized");
         toast.success("Successfuly logged in");
         redirect("/dashboard");
       }
 
+      setStatus("unauthorized");
       toast.warning("Wrong email or password");
     },
   });

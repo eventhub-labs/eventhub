@@ -17,6 +17,8 @@ import { toast } from "sonner";
 export default function UserMenuItem() {
   const { user, clearUser } = useUser();
 
+  console.log(user?.imgUrl);
+
   const handleLogout = async () => {
     await logout();
     clearUser();
@@ -52,7 +54,7 @@ export default function UserMenuItem() {
         <div className="relative aspect-square h-full">
           <Image
             className="w-12"
-            src={user.imgSrc || "/img/no-user.png"}
+            src={user.imgUrl || "/img/no-user.png"}
             alt="user image"
             fill
             sizes="48"
