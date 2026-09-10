@@ -53,7 +53,7 @@ export default function UserMenuItem() {
       >
         <div className="relative aspect-square h-full">
           <Image
-            className="w-12"
+            className="w-12 rounded-full"
             src={user.imgUrl || "/img/no-user.png"}
             alt="user image"
             fill
