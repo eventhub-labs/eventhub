@@ -23,7 +23,7 @@ const loginFormSchema = z.object({
 });
 
 export default function LoginForm() {
-  const { setUser } = useUser();
+  const { setUser, setStatus } = useUser();
 
   const form = useForm({
     defaultValues: {
@@ -38,11 +38,13 @@ export default function LoginForm() {
       formData.set("email", value.email);
       formData.set("password", value.password);
 
+      setStatus("fetching");
       const res = await login(formData);
       const user = res?.data as IResponseUser | null;
 
       if (res?.status === 200 && user) {
         setUser(user);
+        setStatus("authorized");
         toast.success("Successfuly logged in", {});
         redirect("/dashboard");
       }

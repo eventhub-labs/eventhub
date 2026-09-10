@@ -1,25 +1,43 @@
-import { IResponseUser } from "@/types";
 import { create } from "zustand";
 
+export interface IUser {
+  accessToken: string;
+  email: string;
+  username: string;
+  name: string;
+  surname: string;
+  imgUrl: string;
+}
+
+export type TStatus = "unauthorized" | "fetching" | "authorized";
+
 interface UserState {
-  user: Omit<IResponseUser, "refreshToken"> | null;
-  setUser: (user: IResponseUser | Omit<IResponseUser, "refreshToken">) => void;
+  user: IUser | null;
+  status: TStatus;
+  setStatus: (status: TStatus) => void;
+  setUser: (user: IUser) => void;
   clearUser: () => void;
-  setProfileImg: (imgSrc: string) => void;
+  setProfileImg: (imgUrl: string) => void;
 }
 
 export const useUser = create<UserState>((set) => ({
   user: null,
+  status: "unauthorized",
+  setStatus: (status) => {
+    set(() => {
+      return { status };
+    });
+  },
   setUser: (user) =>
     set(() => {
       return { user };
     }),
-  setProfileImg: (imgSrc) => {
+  setProfileImg: (imgUrl) => {
     set((state) => {
       return {
         user: {
           ...state.user!,
-          imgSrc: imgSrc,
+          imgSrc: imgUrl,
         },
       };
     });
