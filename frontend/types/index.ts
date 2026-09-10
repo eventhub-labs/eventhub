@@ -5,7 +5,7 @@ export interface IResponseUser {
   username: string;
   name: string;
   surname: string;
-  imgUrl: string;
+  imgSrc: string;
 }
 
 export interface IRequestLogin {
@@ -20,4 +20,17 @@ export interface IRequestRegister {
   name: string;
   surname: string;
   phone?: string;
+}
+
+export interface IRequestUpdateUser {
+  username: string;
+  name: string;
+  surname: string;
+  email: string;
+  phone?: string;
+}
+
+export interface IRequestChangePassword {
+  currentPassword: string;
+  newPassword: string;
 }

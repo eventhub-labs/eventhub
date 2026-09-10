@@ -15,7 +15,6 @@ import {
   CalendarDays,
   House,
   ListChecks,
-  Settings,
   Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -48,14 +47,9 @@ const sidebarMenuItems = [
     icon: <ListChecks />,
   },
   {
-    name: "People",
+    name: "Friends",
     url: "/dashboard/friends",
     icon: <Users />,
-  },
-  {
-    name: "Settings",
-    url: "/dashboard/settings",
-    icon: <Settings />,
   },
 ];
 

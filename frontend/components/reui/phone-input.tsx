@@ -143,7 +143,7 @@ function CountrySelect({
             variant="outline"
             size={variant}
             className={cn(
-              "flex gap-1 rounded-s-none rounded-e-none border-e-0 px-2.5 py-0 leading-none hover:bg-transparent focus:z-10 data-pressed:bg-transparent",
+              "flex gap-1 rounded-s-none rounded-e-none border-e-0 border-t-0 border-l-0 px-2.5 py-0 leading-none hover:bg-transparent focus:z-10 data-pressed:bg-transparent",
               disabled && "opacity-50",
             )}
             disabled={disabled}
