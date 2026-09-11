@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import login from "@/features/auth/login";
 import { useUser } from "@/store/user";
 import { IResponseUser } from "@/types";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useSelector } from "@tanstack/react-form";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ const loginFormSchema = z.object({
 });
 
 export default function LoginForm() {
-  const { setUser } = useUser();
+  const { setUser, setStatus } = useUser();
 
   const form = useForm({
     defaultValues: {
@@ -38,18 +38,27 @@ export default function LoginForm() {
       formData.set("email", value.email);
       formData.set("password", value.password);
 
+      setStatus("fetching");
       const res = await login(formData);
       const user = res?.data as IResponseUser | null;
 
       if (res?.status === 200 && user) {
+        if (res.photo) {
+          user.imgUrl = URL.createObjectURL(res.photo);
+        }
+
         setUser(user);
-        toast.success("Successfuly logged in", {});
+        setStatus("authorized");
+        toast.success("Successfuly logged in");
         redirect("/dashboard");
       }
 
+      setStatus("unauthorized");
       toast.warning("Wrong email or password");
     },
   });
+
+  const isSubmitting = useSelector(form.store, (state) => state.isSubmitting);
 
   return (
     <form
@@ -131,7 +140,7 @@ export default function LoginForm() {
             Forgot your password?
           </Link>
         </div>
-        <Button type="submit" disabled={form.state.isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           <span className="text-sm font-bold">Log In</span>
         </Button>
       </div>

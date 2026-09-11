@@ -1,5 +1,6 @@
 "use server";
 
+import { IResponseUser } from "@/types";
 import { cookies } from "next/headers";
 
 export default async function restoreSession() {
@@ -15,8 +16,23 @@ export default async function restoreSession() {
   });
 
   if (res.status === 200) {
+    const userData = (await res.json()) as IResponseUser;
+
+    const getPhotoResponse = await fetch(`${process.env.API_URL}users/me/img`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${userData.accessToken}`,
+      },
+    });
+
+    let photo = null;
+    if (getPhotoResponse.status === 200) {
+      photo = await getPhotoResponse.blob();
+    }
+
     return {
-      data: await res.json(),
+      photo,
+      data: userData,
       status: 200,
     };
   }

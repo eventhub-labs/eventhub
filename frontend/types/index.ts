@@ -1,11 +1,10 @@
 export interface IResponseUser {
-  refreshToken: string;
   accessToken: string;
   email: string;
   username: string;
   name: string;
   surname: string;
-  imgSrc: string;
+  imgUrl: string;
 }
 
 export interface IRequestLogin {
