@@ -47,7 +47,7 @@ export default function UserProfileEditForm({
   email,
   phone,
 }: UserProfileEditFormProps) {
-  const accessToken = useUser((state) => state.user?.accessToken);
+  const { accessToken, imgUrl } = useUser((state) => state.user!);
   const setUser = useUser((state) => state.setUser);
 
   const form = useForm({
@@ -75,7 +75,7 @@ export default function UserProfileEditForm({
       const res = await updateProfile(formData, accessToken);
 
       if (res?.status === 200) {
-        setUser({ accessToken, ...res.data });
+        setUser({ accessToken, ...res.data, imgUrl });
         toast.success("Profile data has been updated");
       }
     },
