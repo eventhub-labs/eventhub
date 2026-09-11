@@ -17,8 +17,6 @@ import { toast } from "sonner";
 export default function UserMenuItem() {
   const { user, clearUser, setStatus } = useUser();
 
-  console.log(user?.imgUrl);
-
   const handleLogout = async () => {
     await logout();
     clearUser();

@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import updateProfile from "@/features/user/update-profile";
 import { useUser } from "@/store/user";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useSelector } from "@tanstack/react-form";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -47,7 +47,7 @@ export default function UserProfileEditForm({
   email,
   phone,
 }: UserProfileEditFormProps) {
-  const accessToken = useUser((state) => state.user?.accessToken);
+  const { accessToken, imgUrl } = useUser((state) => state.user!);
   const setUser = useUser((state) => state.setUser);
 
   const form = useForm({
@@ -75,11 +75,13 @@ export default function UserProfileEditForm({
       const res = await updateProfile(formData, accessToken);
 
       if (res?.status === 200) {
-        setUser({ accessToken, ...res.data });
+        setUser({ accessToken, ...res.data, imgUrl });
         toast.success("Profile data has been updated");
       }
     },
   });
+
+  const isSubmitting = useSelector(form.store, (state) => state.isSubmitting);
 
   return (
     <form
@@ -247,11 +249,7 @@ export default function UserProfileEditForm({
             }}
           />
         </FieldGroup>
-        <Button
-          type="submit"
-          className="mt-3 w-full"
-          disabled={form.state.isSubmitting}
-        >
+        <Button type="submit" className="mt-3 w-full" disabled={isSubmitting}>
           <span className="text-sm font-bold">Edit</span>
         </Button>
       </div>
