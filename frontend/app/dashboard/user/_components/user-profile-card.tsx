@@ -46,7 +46,7 @@ export function UserProfileCardSkeleton() {
 }
 
 type UserProfileCardProps = {
-  imgSrc: string | null;
+  imgUrl: string | null;
   name: string;
   surname: string;
   username: string;
@@ -60,15 +60,15 @@ export default function UserProfileCard({
   surname,
   username,
   phone,
-  imgSrc,
+  imgUrl,
 }: UserProfileCardProps) {
   return (
     <Card className="border-muted h-min w-100 shrink-0 border-2 bg-transparent p-0">
       <CardHeader className="bg-accent flex flex-col items-center gap-y-1 border-b p-8">
         <div className="relative">
           <Image
-            className="h-25 w-25"
-            src={imgSrc || "/img/no-user.png"}
+            className="h-25 w-25 rounded-full"
+            src={imgUrl || "/img/no-user.png"}
             alt="user image"
             width={100}
             height={100}

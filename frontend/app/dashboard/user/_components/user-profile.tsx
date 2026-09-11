@@ -6,19 +6,32 @@ import UserProfileActions, {
 } from "./user-profile-actions";
 import UserProfileCard, { UserProfileCardSkeleton } from "./user-profile-card";
 import { useEffect, useState } from "react";
-import { useUser } from "@/store/user";
+import { IUser, useUser } from "@/store/user";
 import { IResponseUser } from "@/types";
+import { toast } from "sonner";
 
 export default function UserProfile() {
   const accessToken = useUser((state) => state.user?.accessToken);
   const { user: updatedUser } = useUser((state) => state);
-  const [user, setUser] = useState<IResponseUser | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
     let ignore = false;
     if (accessToken && !ignore) {
       const res = getMyProfile(accessToken);
-      res.then((data) => setUser(data));
+      res
+        .then((res) => {
+          if (res.status === 200 && res) {
+            if (res.photo) {
+              res.data.imgUrl = URL.createObjectURL(res.photo);
+            }
+
+            setUser(res.data as IResponseUser);
+          }
+        })
+        .catch((err) => {
+          toast.warning(err);
+        });
     }
 
     return () => {
